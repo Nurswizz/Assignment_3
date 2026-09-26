@@ -15,13 +15,13 @@ class RequestTest {
 
     @Test
     void answerRequestAddsAnswerPrefix() {
-        Response response = new AnswerRequest(echo).execute(new RequestData("hi"));
+        Response response = new AnswerRequest(echo).execute(new RequestData("gpt-5", "hi"));
         assertEquals(new Response("200", "Answer: hi"), response);
     }
 
     @Test
     void classifyRequestAddsClassifyPrefix() {
-        Response response = new ClassifyRequest(echo).execute(new RequestData("hi"));
+        Response response = new ClassifyRequest(echo).execute(new RequestData("gpt-5", "hi"));
         assertEquals(new Response("200", "Classify: hi"), response);
     }
 
@@ -30,6 +30,6 @@ class RequestTest {
         Provider failing = req -> {
             throw new ProviderException(ProviderException.Reason.UNAVAILABLE, "down");
         };
-        assertThrows(ProviderException.class, () -> new AnswerRequest(failing).execute(new RequestData("hi")));
+        assertThrows(ProviderException.class, () -> new AnswerRequest(failing).execute(new RequestData("gpt-5", "hi")));
     }
 }

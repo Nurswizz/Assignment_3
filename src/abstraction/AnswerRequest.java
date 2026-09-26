@@ -12,6 +12,6 @@ public class AnswerRequest extends Request {
 
     @Override
     public Response execute(RequestData req) {
-        return provider.generate(new RequestData("Answer: " + req.payload()));
+        return provider.generate(new RequestData(req.model(), "Answer: " + req.payload()));
     }
 }

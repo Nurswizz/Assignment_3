@@ -27,7 +27,7 @@ class LegacyOllamaProviderAdapterTest {
     @Test
     void successIsMappedTo200() {
         Provider adapter = new LegacyOllamaProviderAdapter(new LegacyOllamaProvider());
-        assertEquals(new Response("200", "Legacy response: hi"), adapter.generate(new RequestData("hi")));
+        assertEquals(new Response("200", "Legacy response: hi"), adapter.generate(new RequestData("llama3", "hi")));
     }
 
     @ParameterizedTest
@@ -40,7 +40,7 @@ class LegacyOllamaProviderAdapterTest {
     })
     void errorCodeIsTranslatedToProviderException(String code, Reason expected) {
         Provider adapter = adapterReturning(new LegacyResponse(code, null));
-        ProviderException e = assertThrows(ProviderException.class, () -> adapter.generate(new RequestData("hi")));
+        ProviderException e = assertThrows(ProviderException.class, () -> adapter.generate(new RequestData("llama3", "hi")));
         assertEquals(expected, e.reason());
         assertFalse(e.getMessage().contains(code), "legacy error code must not leak");
     }
@@ -48,14 +48,14 @@ class LegacyOllamaProviderAdapterTest {
     @Test
     void nullResponseIsUnavailable() {
         ProviderException e = assertThrows(ProviderException.class,
-                () -> adapterReturning(null).generate(new RequestData("hi")));
+                () -> adapterReturning(null).generate(new RequestData("llama3", "hi")));
         assertEquals(Reason.UNAVAILABLE, e.reason());
     }
 
     @Test
     void successWithoutResultIsUnknown() {
         ProviderException e = assertThrows(ProviderException.class,
-                () -> adapterReturning(new LegacyResponse("0", null)).generate(new RequestData("hi")));
+                () -> adapterReturning(new LegacyResponse("0", null)).generate(new RequestData("llama3", "hi")));
         assertEquals(Reason.UNKNOWN, e.reason());
     }
 }

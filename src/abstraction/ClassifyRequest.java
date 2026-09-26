@@ -12,6 +12,6 @@ public class ClassifyRequest extends Request{
 
     @Override
     public Response execute(RequestData req) {
-        return provider.generate(new RequestData("Classify: " + req.payload()));
+        return provider.generate(new RequestData(req.model(), "Classify: " + req.payload()));
     }
 }
