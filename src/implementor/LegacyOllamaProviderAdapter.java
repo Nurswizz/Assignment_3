@@ -16,7 +16,7 @@ public class LegacyOllamaProviderAdapter implements Provider{
     @Override
     public Response generate(RequestData req) {
         LegacyResponse legacyResponse = legacyProvider.process(req.payload(), 0);
-        if (!legacyResponse.errorCode().equals("500")) {
+        if (legacyResponse.errorCode().equals("0")) {
             return new Response(
                     "200",
                     legacyResponse.result()
