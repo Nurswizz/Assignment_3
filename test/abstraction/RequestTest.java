@@ -1,11 +1,13 @@
 package abstraction;
 
 import implementor.Provider;
+import implementor.ProviderException;
 import model.RequestData;
 import model.Response;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class RequestTest {
 
@@ -24,8 +26,10 @@ class RequestTest {
     }
 
     @Test
-    void requestWorksWithAnyProvider() {
-        Provider failing = req -> new Response("500", "down");
-        assertEquals(new Response("500", "down"), new AnswerRequest(failing).execute(new RequestData("hi")));
+    void providerFailureReachesClient() {
+        Provider failing = req -> {
+            throw new ProviderException(ProviderException.Reason.UNAVAILABLE, "down");
+        };
+        assertThrows(ProviderException.class, () -> new AnswerRequest(failing).execute(new RequestData("hi")));
     }
 }
